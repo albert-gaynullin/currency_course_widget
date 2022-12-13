@@ -7,12 +7,7 @@
 </head>
 <body>
 	<div class="exchange-rates" id="exchangeRatesDiv">
-	  
 	</div>
-	<div class="exchange-rates" id="cnnNewsDiv">
-	  
-	</div>
-
 </body>
 </html>
 <script type="text/javascript" language="JavaScript">
@@ -27,7 +22,7 @@
       return +number.toFixed(2);
     }
 
-	xhrCurr = new XMLHttpRequest();
+    xhrCurr = new XMLHttpRequest();
     xhrCurr.open('GET', currentCheckUrl);
 	xhrCurr.onload = function() {
 		let jsonResponse = JSON.parse(xhrCurr.responseText);
@@ -39,30 +34,4 @@
 		exchangeRatesDiv.insertAdjacentHTML('afterbegin', currTbl);
 	};
     xhrCurr.send();
-</script>
-
-<script type="text/javascript" language="JavaScript">
-	let newsCheckURL = "http://rss.cnn.com/rss/edition.rss";
-	let newsCount = 3;
-	
-	let newsList = ""
-	newsList += "<h2>News</h2>"
-
-	xhr = new XMLHttpRequest();
-    xhr.open('GET', newsCheckURL);
-	xhr.onload = function() {
-		let xmlDoc = parser.parseFromString(xhr.responseText,"text/xml");
-		let newsListXML = xmlDoc.getElementsByTagName("item")
-		for (let i=0; i<newsCount; i++){
-		  newsList += `
-		  <div class="newsItem">
-		    <h3>${newsListXML[0].getElementsByTagName("title")[0].nodeValue}</h3>
-		  </div>
-		  `;
-		  //let selectEl = currTable.getElementById(item.toUpperCase());
-    	  //selectEl.innerHTML = rounded(jsonResponse[item]["inverseRate"]);
-		}
-		cnnNewsDiv.insertAdjacentHTML('afterbegin', newsList);
-	};
-    xhr.send();
 </script>
