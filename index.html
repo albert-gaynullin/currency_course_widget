@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Курс валют</title>
+</head>
+<body>
+	<div class="exchange-rates" id="exchangeRatesDiv">
+	  
+	</div>
+	<div class="exchange-rates" id="cnnNewsDiv">
+	  
+	</div>
+
+</body>
+</html>
+<script type="text/javascript" language="JavaScript">
+	let currentCheckUrl = "http://www.floatrates.com/daily/usd.json";
+	let currList = ["eur", "gbp", "try", "rub", "chf", "cny", "cad"]
+	
+	let currTbl = ""
+	currTbl += '<table border="1" cellspacing="0" id="exchangeRates">'
+	currTbl += '<tr><td colspan="2" align="center">Exchange Rates</td></tr>'
+
+	let rounded = function(number){
+      return +number.toFixed(2);
+    }
+
+	xhrCurr = new XMLHttpRequest();
+    xhrCurr.open('GET', currentCheckUrl);
+	xhrCurr.onload = function() {
+		let jsonResponse = JSON.parse(xhrCurr.responseText);
+		currList.forEach(function(item){
+		  currTbl += `<tr><td>${item.toUpperCase()}/USD</td><td id="EUR">${rounded(jsonResponse[item]["inverseRate"])}&#36</td></tr>`;
+		  //let selectEl = currTable.getElementById(item.toUpperCase());
+    	  //selectEl.innerHTML = rounded(jsonResponse[item]["inverseRate"]);
+		})
+		exchangeRatesDiv.insertAdjacentHTML('afterbegin', currTbl);
+	};
+    xhrCurr.send();
+</script>
+
+<script type="text/javascript" language="JavaScript">
+	let newsCheckURL = "http://rss.cnn.com/rss/edition.rss";
+	let newsCount = 3;
+	
+	let newsList = ""
+	newsList += "<h2>News</h2>"
+
+	xhr = new XMLHttpRequest();
+    xhr.open('GET', newsCheckURL);
+	xhr.onload = function() {
+		let xmlDoc = parser.parseFromString(xhr.responseText,"text/xml");
+		let newsListXML = xmlDoc.getElementsByTagName("item")
+		for (let i=0; i<newsCount; i++){
+		  newsList += `
+		  <div class="newsItem">
+		    <h3>${newsListXML[0].getElementsByTagName("title")[0].nodeValue}</h3>
+		  </div>
+		  `;
+		  //let selectEl = currTable.getElementById(item.toUpperCase());
+    	  //selectEl.innerHTML = rounded(jsonResponse[item]["inverseRate"]);
+		}
+		cnnNewsDiv.insertAdjacentHTML('afterbegin', newsList);
+	};
+    xhr.send();
+</script>
